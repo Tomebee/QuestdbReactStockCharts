@@ -1,0 +1,1 @@
+docker run -p 9000:9000 -p 9009:9009 -p 9003:9003 -v "$(pwd)/conf:/root/.questdb/conf" questdb/questdb
