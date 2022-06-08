@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# Questdb + React stock charts
+Project for AGH ASK classes. The goal was to present Questdb as a time series data provider along with proper visualisations built with D3.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Pros and cons Questdb
 
-## Available Scripts
+Plus
+- Really fast with a lot of data including filtering by timestamp
+- Cool import feature (you can import data using csv)
+- Console and API
+- Docker
+- Built-in visualisations
 
-In the project directory, you can run:
+Minus
+- Hard to configure authentication and caches
+- Not yet all SQL features in place
 
-### `npm start`
+Time-series data for stock charts goes well with QuestDb. Its really easy to populate database and do some queries. Joins are blazingly fast and cooperative as well as filtering. On the frontend side I am using react stock charts library that is built on top of d3. Besides that I use cors-anywhere to provide API as a CORS proxy
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Queries samples
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```sql
+select spx.time, spx.close as SPX_close, btc.close as BTC_close
+from 'SP_SPX, D.csv' as spx
+left join 'BTCUSD, D.csv' as btc on spx.time = btc.time
+group by 'BTCUSD, D.csv'.time
+```
 
-### `npm test`
+```sql
+select * from 'BTCUSD, D.csv' where to_timestamp(time) > to_timestamp('2020-01-01')
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Prerequisites
 
-### `npm run build`
+- Docker
+- Node with Yarn (npm install --global yarn)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Get started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Run `questdb.run.sh`
+- Open browser and navigate to `localhost:9000` then in import section browse 2 csv files with BTC and SPX data and send them
+![image](https://user-images.githubusercontent.com/34909339/172721639-e8ecbdf8-a1e2-48f4-b177-d7ed8d29c4bc.png)
+- Tables are automatically created so go to Console and try queries out
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Part 2
+- Navigate to react root, install packages using command `yarn`
+- Run `yarn cors-anywhere`
+- Run `yarn start`
 
-### `npm run eject`
+## Good to know
+React uses tailwind css. There are 2 types of charts: Line and OHLC. Line is for BTC/SPX correlation, on the other hand OHLC is just for BTC. BTC chart also have 50 simple moving average
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Enjoy
